@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MultiplierNombresTest {
     @DisplayName("Test de la méthode doubleValue")
@@ -21,8 +20,10 @@ class MultiplierNombresTest {
 
         // Then (alors) => ici on fait tous les tests (asserts)
         assertNotNull(nbrs);
-        assertTrue(verificationDeLaTaille(nombres, nbrs));
-        assertTrue(verificationDesValeurs(nombres, nbrs));
+//        assertTrue(verificationDeLaTaille(nombres, nbrs));
+        assertEquals(5, nbrs.size());
+//        assertTrue(verificationDesValeurs(nombres, nbrs));
+        assertEquals(Arrays.asList(2, 4, 10, 20, 30), nbrs);
     }
 
     boolean verificationDeLaTaille(List<Integer> nombres, List<Integer> nbrs) {

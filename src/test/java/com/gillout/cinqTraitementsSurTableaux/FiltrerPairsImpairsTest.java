@@ -19,7 +19,8 @@ class FiltrerPairsImpairsTest {
         List<Integer> pairs = FiltrerPairsImpairs.evensFilter(nombres);
 
         // Then (alors) => ici on fait tous les tests (asserts)
-        assertTrue(verificationDesValeursPairs(pairs));
+//        assertTrue(verificationDesValeursPairs(pairs));
+        assertEquals(Arrays.asList(2, 10), pairs);
     }
 
     @DisplayName("Test de la méthode oddsFilter")
@@ -32,7 +33,8 @@ class FiltrerPairsImpairsTest {
         List<Integer> impairs = FiltrerPairsImpairs.oddsFilter(nombres);
 
         // Then (alors) => ici on fait tous les tests (asserts)
-        assertTrue(verificationDesValeursImpairs(impairs));
+//        assertTrue(verificationDesValeursImpairs(impairs));
+        assertEquals(Arrays.asList(1, 5, 15), impairs);
     }
 
     boolean verificationDesValeursPairs(List<Integer> pairs) {
