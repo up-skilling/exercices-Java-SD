@@ -2,40 +2,44 @@ package com.gillout.cinqTraitementsSurTableaux;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MultiplierNombresTest {
+    MultiplierNombres multiplierNombres = new MultiplierNombres();
+
     @DisplayName("Test de la méthode doubleValue")
     @Test
     void doitRetournerLesValeursMultiplieesParDeux() {
-        // Given (étant donné les données initiales) => ici on fait toutes les initialisations
+        // Given
         List<Integer> nombres = Arrays.asList(1, 2, 5, 10, 15);
+        List<Integer> attendu = List.of(2, 4, 10, 20, 30);
 
-        // When (quand) => ici on fait appel à la fonction que l'on veut tester
-        List<Integer> nbrs = MultiplierNombres.doubleValue(nombres);
+        // When
+        List<Integer> actuel = multiplierNombres.doubleValue(nombres);
 
-        // Then (alors) => ici on fait tous les tests (asserts)
-        assertNotNull(nbrs);
-//        assertTrue(verificationDeLaTaille(nombres, nbrs));
-        assertEquals(5, nbrs.size());
-//        assertTrue(verificationDesValeurs(nombres, nbrs));
-        assertEquals(Arrays.asList(2, 4, 10, 20, 30), nbrs);
+        // Then
+        assertNotNull(actuel);
+        assertThat(actuel.size()).isEqualTo(attendu.size());
+        assertThat(actuel).isEqualTo(attendu);
     }
 
-    boolean verificationDeLaTaille(List<Integer> nombres, List<Integer> nbrs) {
-        return nombres.size() == nbrs.size();
-    }
+    @DisplayName("Test de la méthode doubleValue")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void doitRenvoyerUneExceptionSiVideOuNull(List<Integer> nombres) {
+        // Given
+        String messageAttendu = "Liste invalide";
 
-    boolean verificationDesValeurs(List<Integer> nombres, List<Integer> nbrs) {
-        for(int i = 0; i < nombres.size(); i++) {
-            if (nombres.get(i) * 2 != nbrs.get(i)) {
-                return false;
-            }
-        }
-        return true;
+        // When and Then
+        Exception actuel = assertThrows(RuntimeException.class, () -> multiplierNombres.doubleValue(nombres));
+        String messageActuel = actuel.getMessage();
+        assertTrue(messageActuel.contains(messageAttendu));
     }
 }

@@ -2,56 +2,74 @@ package com.gillout.cinqTraitementsSurTableaux;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FiltrerPairsImpairsTest {
+    private final FiltrerPairsImpairs filtrerPairsImpairs = new FiltrerPairsImpairs();
+
     @DisplayName("Test de la méthode evensFilter")
     @Test
     void doitRenvoyerLesValeursPairs() {
-        // Given (étant donné les données initiales) => ici on fait toutes les initialisations
+        // Given
         List<Integer> nombres = Arrays.asList(1, 2, 5, 10, 15);
+        List<Integer> attendu = List.of(2, 10); // List.of() (depuis java 9) est un peu plus moderne Arrays.asList() (java 1.2), ils font globalement la même chose mais la 1ère est immutable (non modifiable) en gros c'est vraiment une constante
 
-        // When (quand) => ici on fait appel à la fonction que l'on veut tester
-        List<Integer> pairs = FiltrerPairsImpairs.evensFilter(nombres);
+        // When
+        List<Integer> actuel = filtrerPairsImpairs.evensFilter(nombres);
 
-        // Then (alors) => ici on fait tous les tests (asserts)
-//        assertTrue(verificationDesValeursPairs(pairs));
-        assertEquals(Arrays.asList(2, 10), pairs);
+        // Then
+        assertThat(actuel.size()).isEqualTo(attendu.size());
+        assertThat(actuel).isEqualTo(attendu);
+        assertTrue(actuel.containsAll(attendu) && attendu.containsAll(actuel));
+    }
+
+    @DisplayName("Test de la méthode evensFilter si la tableau est vide ou null")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void doitRenvoyerUneExceptionSiLeTableauPairEstVideOuNull(List<Integer> nombres) {
+        // Given
+        String messageAttendu = "Liste invalide";
+
+        // When and Then
+        Exception actuel = assertThrows(RuntimeException.class, () -> filtrerPairsImpairs.evensFilter(nombres));
+        String messageActuel = actuel.getMessage();
+        assertTrue(messageActuel.contains(messageAttendu));
     }
 
     @DisplayName("Test de la méthode oddsFilter")
     @Test
     void doitRenvoyerLesValeursImpairs() {
-        // Given (étant donné les données initiales) => ici on fait toutes les initialisations
+        // Given
         List<Integer> nombres = Arrays.asList(1, 2, 5, 10, 15);
+        List<Integer> attendu = List.of(1, 5, 15);
 
-        // When (quand) => ici on fait appel à la fonction que l'on veut tester
-        List<Integer> impairs = FiltrerPairsImpairs.oddsFilter(nombres);
+        // When
+        List<Integer> actuel = filtrerPairsImpairs.oddsFilter(nombres);
 
-        // Then (alors) => ici on fait tous les tests (asserts)
-//        assertTrue(verificationDesValeursImpairs(impairs));
-        assertEquals(Arrays.asList(1, 5, 15), impairs);
+        // Then
+        assertThat(actuel.size()).isEqualTo(attendu.size());
+        assertThat(actuel).isEqualTo(attendu);
+        assertTrue(actuel.containsAll(attendu) && attendu.containsAll(actuel));
     }
 
-    boolean verificationDesValeursPairs(List<Integer> pairs) {
-        for(int i = 0; i < pairs.size(); i++) {
-            if (pairs.get(i) % 2 != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
+    @DisplayName("Test de la méthode evensFilter si la tableau est vide ou null")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void doitRenvoyerUneExceptionSiLeTableauImpairEstVideOuNull(List<Integer> nombres) {
+        // Given
+        String messageAttendu = "Liste invalide";
 
-    boolean verificationDesValeursImpairs(List<Integer> impairs) {
-        for(Integer impair : impairs) {
-            if (impair % 2 == 0) {
-                return false;
-            }
-        }
-        return true;
+        // When and Then
+        Exception actuel = assertThrows(RuntimeException.class, () -> filtrerPairsImpairs.oddsFilter(nombres));
+        String messageActuel = actuel.getMessage();
+        assertTrue(messageActuel.contains(messageAttendu));
     }
 }
